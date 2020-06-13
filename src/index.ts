@@ -28,19 +28,31 @@ export const shuffle = (rng: () => number) =>
 console.log(shuffle(middleSquare)([1, 2, 3, 4, 5]));
 
 
+// canvas
+const width = window.innerWidth;
+const height = window.innerHeight;
+
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+canvas.width = width;
+canvas.height = height;
+
 const context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
 let y = 0;
 
 const draw = (rng: () => number) => () => {
-  for (let x = 0; x < 600; x++) {
-    if (rng() < 0.5) {
+  for (let x = 0; x < width; x++) {
+    const n = rng();
+
+    if (n < 0.5) {
+      const color = '#' + Math.floor((0xFFFFFF * n)).toString(16);
+
+      context.fillStyle = color;
       context.fillRect(x, y, 1, 1);
     }
   }
 
-  y++ < 600 && requestAnimationFrame(draw(rng));
+  y++ < height && requestAnimationFrame(draw(rng));
 };
 
 draw(LCG)();
